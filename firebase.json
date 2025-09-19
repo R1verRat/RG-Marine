@@ -5,12 +5,9 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/intake.html" //
-      }
     ]
+    // The "rewrites" section should be removed or commented out for now
+    // If you plan to use rewrites for other purposes later (like SPAs),
+    // we can re-add them, but they shouldn't force /intake.html as the default.
   }
 }

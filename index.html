@@ -1,89 +1,310 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.3.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.3.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.3.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RG Marine V2 - Welcome</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #a8c0ff, #3f2b96); /* Nice soft blue shade */
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.15); /* Slightly transparent white */
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        .logo {
+            /* Placeholder for your company logo */
+            width: 100px; /* Adjust size as needed */
+            height: 100px; /* Adjust size as needed */
+            background-color: #fff; /* Placeholder background */
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: #3f2b96;
+            font-weight: bold;
+            /* If you have an image, use: background-image: url('your-logo.png'); background-size: contain; background-repeat: no-repeat; */
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+        p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .auth-form input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .auth-form button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ffbe0b; /* A contrasting color for buttons */
+            color: #3f2b96;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-bottom: 10px;
+        }
+        .auth-form button:hover {
+            background-color: #e6a700;
+            transform: translateY(-2px);
+        }
+        .auth-form p.error-message {
+            color: #ff5252;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+        }
+        .app-options button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background-color: #4CAF50; /* Green for success/access */
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-bottom: 15px;
+        }
+        .app-options button.admin { background-color: #E91E63; } /* Pink for Admin */
+        .app-options button.scanner { background-color: #2196F3; } /* Blue for Scanner */
+        .app-options button.retail { background-color: #FF9800; } /* Orange for Retail */
+        .app-options button:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+        .app-options button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .logout-button {
+            margin-top: 20px;
+            background-color: #f44336; /* Red for logout */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
     </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo">RG</div>
+        <h1>Welcome to RG Marine V2</h1>
+        <p>Your central hub for inventory management and sales.</p>
+
+        <!-- Authentication Form -->
+        <div id="auth-section">
+            <form class="auth-form" id="signin-form">
+                <input type="email" id="email-input" placeholder="Email" required>
+                <input type="password" id="password-input" placeholder="Password" required>
+                <p class="error-message" id="auth-error-message"></p>
+                <button type="submit">Sign In</button>
+                <button type="button" id="signup-button">Create Account</button>
+            </form>
+        </div>
+
+        <!-- App Options Section (Hidden until authenticated) -->
+        <div id="app-options-section" style="display: none;">
+            <p>Hello, <span id="user-display-name"></span>! What would you like to do?</p>
+            <div class="app-options">
+                <button class="admin" id="admin-app-button" disabled>Admin Panel</button>
+                <button class="scanner" id="scanner-app-button" disabled>Inventory Scanner</button>
+                <button class="retail" id="retail-app-button" disabled>Retail App</button>
+            </div>
+            <button class="logout-button" id="logout-button">Sign Out</button>
+        </div>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+
+    <!-- Firebase SDKs - Using compat versions for consistency with intake.html -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
 
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // Your Firebase Configuration (Project ID: rg-marine-v2)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCe33YSO0AKQ419ZIT_rhmE3LPFC2KU4ys",
+            authDomain: "rg-marine-v2.firebaseapp.com",
+            projectId: "rg-marine-v2",
+            storageBucket: "rg-marine-v2.firebasestorage.app",
+            messagingSenderId: "1029678913953",
+            appId: "1:1029678913953:web:62bfba90a0f30b3ce7d3e0",
+            measurementId: "G-8R66Z7G5NB"
+        };
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const authSection = document.getElementById('auth-section');
+        const appOptionsSection = document.getElementById('app-options-section');
+        const signinForm = document.getElementById('signin-form');
+        const signupButton = document.getElementById('signup-button');
+        const logoutButton = document.getElementById('logout-button');
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('password-input');
+        const authErrorMessage = document.getElementById('auth-error-message');
+        const userDisplayName = document.getElementById('user-display-name');
+
+        const adminAppButton = document.getElementById('admin-app-button');
+        const scannerAppButton = document.getElementById('scanner-app-button');
+        const retailAppButton = document.getElementById('retail-app-button');
+
+        // --- Authentication Listeners ---
+
+        // Listen for authentication state changes (user signs in/out)
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                // User is signed in
+                console.log("User signed in:", user.uid);
+                userDisplayName.textContent = user.email; // Display user's email
+
+                // Fetch user's role from Firestore
+                try {
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        const userRole = userData.role;
+                        console.log("User role:", userRole);
+
+                        // Enable buttons based on role
+                        if (userRole === 'admin') {
+                            adminAppButton.disabled = false;
+                            scannerAppButton.disabled = false; // Admins can access everything for now
+                            retailAppButton.disabled = false;
+                        } else if (userRole === 'scanner') {
+                            scannerAppButton.disabled = false;
+                        } else if (userRole === 'retail') {
+                            retailAppButton.disabled = false;
+                        }
+                        // You can add more specific logic here later
+                    } else {
+                        console.warn("User document not found in Firestore. Assigning default minimal access.");
+                        // Handle users without explicit roles (e.g., guest or limited access)
+                    }
+                } catch (error) {
+                    console.error("Error fetching user role:", error);
+                    authErrorMessage.textContent = "Error fetching user data.";
+                }
+
+                authSection.style.display = 'none';
+                appOptionsSection.style.display = 'block';
+            } else {
+                // User is signed out
+                console.log("User signed out.");
+                authSection.style.display = 'block';
+                appOptionsSection.style.display = 'none';
+                authErrorMessage.textContent = ''; // Clear any previous error messages
+                // Disable all buttons when signed out
+                adminAppButton.disabled = true;
+                scannerAppButton.disabled = true;
+                retailAppButton.disabled = true;
+            }
+        });
+
+        // Sign In handler
+        signinForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            authErrorMessage.textContent = ''; // Clear previous errors
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                // onAuthStateChanged listener will handle UI update
+            } catch (error) {
+                console.error("Sign In Error:", error.message);
+                authErrorMessage.textContent = "Sign In Failed: " + error.message;
+            }
+        });
+
+        // Sign Up handler
+        signupButton.addEventListener('click', async () => {
+            authErrorMessage.textContent = ''; // Clear previous errors
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                console.log("User created:", userCredential.user.uid);
+                alert("Account created successfully! You are now signed in. An admin will need to assign your role.");
+                // Optionally, you could immediately add a default 'pending' or 'guest' role to Firestore here
+                // Example: await db.collection('users').doc(userCredential.user.uid).set({ role: 'guest', email: email });
+                // onAuthStateChanged listener will handle UI update
+            } catch (error) {
+                console.error("Sign Up Error:", error.message);
+                authErrorMessage.textContent = "Sign Up Failed: " + error.message;
+            }
+        });
+
+        // Sign Out handler
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                // onAuthStateChanged listener will handle UI update
+            } catch (error) {
+                console.error("Sign Out Error:", error.message);
+                authErrorMessage.textContent = "Sign Out Failed: " + error.message;
+            }
+        });
+
+        // --- Navigation Handlers (Currently just console logs, will link to pages later) ---
+        adminAppButton.addEventListener('click', () => {
+            window.location.href = 'admin.html'; // Will navigate to admin page
+        });
+
+        scannerAppButton.addEventListener('click', () => {
+            window.location.href = 'intake.html'; // Will navigate to your intake page
+        });
+
+        retailAppButton.addEventListener('click', () => {
+            window.location.href = 'retail.html'; // Will navigate to retail page
+        });
+
     </script>
-  </body>
+</body>
 </html>
