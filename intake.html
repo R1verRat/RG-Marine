@@ -96,6 +96,7 @@
                 const uploadTask = await storageRef.put(imageFile);
                 const imageUrl = await uploadTask.ref.getDownloadURL(); // Get the public URL of the uploaded image
 
+
                 // 3. Save the item data (including the image URL) to Firestore
                 await db.collection('inventory').add({
                     itemName: itemName,
