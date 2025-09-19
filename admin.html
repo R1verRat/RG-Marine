@@ -20,21 +20,21 @@
         <header class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             <h1 class="text-3xl font-bold text-gray-800">Admin Management Dashboard</h1>
             <div class="flex space-x-4">
-                <button id="hr-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full transition-colors duration-200 shadow-md">H.R.</button>
-                <button id="add-inventory-btn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-full transition-colors duration-200 shadow-md">Add Inventory</button>
+                <button id="hr-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full">H.R.</button>
+                <button id="inventory-btn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-full">Inventory</button>
             </div>
         </header>
         <p class="text-sm text-gray-500">
             Admin User: <span id="user-id" class="font-mono text-gray-600 font-semibold break-all">...loading...</span>
         </p>
-        </div>
+    </div>
 
     <div id="hr-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div class="bg-white rounded-2xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
             <div class="p-6 border-b border-gray-200 flex justify-between items-center">
                 <h2 class="text-2xl font-bold text-gray-800">H.R. / Employee Management</h2>
-                <button id="close-hr-modal-btn" class="text-gray-400 hover:text-gray-600 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button id="close-hr-modal-btn" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div id="employee-management-container" class="p-6 overflow-y-auto">
@@ -42,21 +42,40 @@
         </div>
     </div>
 
-    <div id="inventory-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
+    <div id="edit-employee-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-hidden flex flex-col">
-             <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-                <h2 id="inventory-modal-title" class="text-2xl font-bold text-gray-800">Add Inventory Item</h2>
-                <button id="close-inventory-modal-btn" class="text-gray-400 hover:text-gray-600 transition-colors">
-                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-800">Edit Employee Profile</h2>
             </div>
-            <form id="inventory-form" class="p-6 overflow-y-auto space-y-4">
-                <p>Your inventory form fields go here...</p>
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full">Save Item</button>
+            <form id="edit-employee-form" class="p-6 overflow-y-auto space-y-4">
+                <input type="hidden" id="edit-employee-uid">
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" id="edit-employee-name" class="w-full mt-1 px-3 py-2 rounded-md border border-gray-300">
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="edit-employee-email" disabled class="w-full mt-1 px-3 py-2 rounded-md border border-gray-300 bg-gray-100">
+                </div>
+                 <div>
+                    <label class="text-sm font-medium text-gray-700">Assigned Role</label>
+                    <select id="edit-employee-role" class="w-full mt-1 px-3 py-2 rounded-md border border-gray-300"></select>
+                </div>
+                 <div>
+                    <label class="text-sm font-medium text-gray-700">Status</label>
+                    <select id="edit-employee-status" class="w-full mt-1 px-3 py-2 rounded-md border border-gray-300">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-4 pt-4">
+                     <button type="button" id="close-edit-employee-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-full">Cancel</button>
+                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full">Save Changes</button>
+                </div>
             </form>
         </div>
     </div>
-
+    
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
@@ -68,24 +87,22 @@
             projectId: "rg-marine-v2",
             storageBucket: "rg-marine-v2.firebasestorage.app",
             messagingSenderId: "1029678913953",
-            appId: "1:1029678913953:web:62bfba90a0f30b3ce7d3e0"
+            appId: "1:1029678913953:web:62bfba90a0f30b3ce7d3e0",
+            measurementId: "G-8R66Z7G5NB"
         };
-
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // --- ADMIN PAGE GUARD ---
         auth.onAuthStateChanged(user => {
             if (user) {
-                db.collection('users').doc(user.uid).get().then((doc) => {
+                db.collection('users').doc(user.uid).get().then(doc => {
                     if (doc.exists && doc.data().role === 'admin') {
-                        console.log("Admin access granted.");
                         document.body.style.display = 'block';
                         document.getElementById('user-id').textContent = user.email;
                         initializeAppLogic();
                     } else {
-                        alert("Access Denied. You must be an admin to view this page.");
+                        alert("Access Denied. You must be an admin.");
                         window.location.href = 'index.html';
                     }
                 });
@@ -95,19 +112,17 @@
         });
 
         function initializeAppLogic() {
-            // --- UI Element References ---
-            // CHANGED: IDs updated to match new terminology
             const hrBtn = document.getElementById('hr-btn');
             const hrModal = document.getElementById('hr-modal');
             const closeHrModalBtn = document.getElementById('close-hr-modal-btn');
             const employeeContainer = document.getElementById('employee-management-container');
+            const editEmployeeModal = document.getElementById('edit-employee-modal');
+            const editEmployeeForm = document.getElementById('edit-employee-form');
+            const closeEditEmployeeBtn = document.getElementById('close-edit-employee-btn');
+            const inventoryBtn = document.getElementById('inventory-btn'); // Added reference
             
-            // FIXED: Added references for the inventory modal
-            const addInventoryBtn = document.getElementById('add-inventory-btn');
-            const inventoryModal = document.getElementById('inventory-modal');
-            const closeInventoryModalBtn = document.getElementById('close-inventory-modal-btn');
+            const ROLES = ['guest', 'scanner', 'retail', 'admin'];
 
-            // --- H.R. / Employee Management Functions ---
             function renderEmployees(users) {
                 employeeContainer.innerHTML = '';
                 const table = document.createElement('table');
@@ -115,8 +130,10 @@
                 table.innerHTML = `
                     <thead class="bg-gray-50 text-xs uppercase">
                         <tr>
+                            <th class="p-3">Full Name</th>
                             <th class="p-3">Email</th>
                             <th class="p-3">Assigned Role</th>
+                            <th class="p-3">Status</th>
                             <th class="p-3">Actions</th>
                         </tr>
                     </thead>
@@ -124,50 +141,92 @@
                 const tbody = table.querySelector('tbody');
                 users.forEach(user => {
                     const tr = document.createElement('tr');
+                    const userStatus = user.data.status || 'active';
                     tr.innerHTML = `
+                        <td class="p-3">${user.data.fullName || 'N/A'}</td>
                         <td class="p-3">${user.data.email || 'N/A'}</td>
+                        <td class="p-3">${user.data.role || 'guest'}</td>
                         <td class="p-3">
-                            <select data-uid="${user.id}" class="role-select rounded-md border-gray-300">
-                                <option value="guest" ${!user.data.role || user.data.role === 'guest' ? 'selected' : ''}>Guest</option>
-                                <option value="scanner" ${user.data.role === 'scanner' ? 'selected' : ''}>Scanner Access</option>
-                                <option value="retail" ${user.data.role === 'retail' ? 'selected' : ''}>Retail Access</option>
-                                <option value="admin" ${user.data.role === 'admin' ? 'selected' : ''}>Admin</option>
-                            </select>
+                            <span class="px-2 py-1 text-xs rounded-full ${userStatus === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                                ${userStatus}
+                            </span>
                         </td>
                         <td class="p-3">
-                            <button data-uid="${user.id}" class="save-role-btn bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md text-sm">Save</button>
+                            <button data-uid="${user.id}" class="edit-employee-btn bg-gray-200 hover:bg-gray-300 text-gray-800 px-3 py-1 rounded-md text-sm">Edit</button>
                         </td>`;
                     tbody.appendChild(tr);
                 });
                 employeeContainer.appendChild(table);
             }
+            
+            function openEditModal(userData) {
+                document.getElementById('edit-employee-uid').value = userData.id;
+                document.getElementById('edit-employee-name').value = userData.data.fullName || '';
+                document.getElementById('edit-employee-email').value = userData.data.email || '';
+                document.getElementById('edit-employee-status').value = userData.data.status || 'active';
+                
+                const roleSelect = document.getElementById('edit-employee-role');
+                roleSelect.innerHTML = '';
+                ROLES.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role;
+                    option.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+                    if (role === (userData.data.role || 'guest')) {
+                        option.selected = true;
+                    }
+                    roleSelect.appendChild(option);
+                });
+                
+                editEmployeeModal.classList.remove('hidden');
+                editEmployeeModal.classList.add('flex');
+            }
 
             function setupEmployeeListener() {
                 db.collection('users').onSnapshot(snapshot => {
-                    const users = snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
-                    renderEmployees(users);
+                    window.allUsers = snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
+                    renderEmployees(window.allUsers);
                 }, error => console.error("Error fetching employees: ", error));
             }
 
-            employeeContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('save-role-btn')) {
-                    const uid = e.target.dataset.uid;
-                    const newRole = document.querySelector(`.role-select[data-uid="${uid}"]`).value;
-                    db.collection('users').doc(uid).update({ role: newRole })
-                        .then(() => alert('Role updated successfully!'))
-                        .catch(err => alert('Error updating role: ' + err.message));
-                }
-            });
-            
-            // --- Event Listeners for Modals ---
             hrBtn.addEventListener('click', () => hrModal.classList.remove('hidden'));
             closeHrModalBtn.addEventListener('click', () => hrModal.classList.add('hidden'));
-
-            // FIXED: Added event listeners for the inventory modal
-            addInventoryBtn.addEventListener('click', () => inventoryModal.classList.remove('hidden'));
-            closeInventoryModalBtn.addEventListener('click', () => inventoryModal.classList.add('hidden'));
             
-            // Initialize the employee list
+            // This button doesn't have a modal yet, so we'll just log a message.
+            inventoryBtn.addEventListener('click', () => {
+                alert("The Inventory dashboard modal will be built next!");
+            });
+
+            employeeContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('edit-employee-btn')) {
+                    const uid = e.target.dataset.uid;
+                    const userData = window.allUsers.find(user => user.id === uid);
+                    if (userData) openEditModal(userData);
+                }
+            });
+
+            closeEditEmployeeBtn.addEventListener('click', () => {
+                editEmployeeModal.classList.remove('flex');
+                editEmployeeModal.classList.add('hidden');
+            });
+
+            editEmployeeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const uid = document.getElementById('edit-employee-uid').value;
+                const updatedData = {
+                    fullName: document.getElementById('edit-employee-name').value,
+                    role: document.getElementById('edit-employee-role').value,
+                    status: document.getElementById('edit-employee-status').value
+                };
+                
+                db.collection('users').doc(uid).update(updatedData)
+                    .then(() => {
+                        alert('Profile updated successfully!');
+                        editEmployeeModal.classList.remove('flex');
+                        editEmployeeModal.classList.add('hidden');
+                    })
+                    .catch(err => alert('Error updating profile: ' + err.message));
+            });
+            
             setupEmployeeListener();
         }
     </script>
