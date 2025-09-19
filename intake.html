@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Inventory Intake</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        form { display: flex; flex-direction: column; max-width: 500px; }
+        input, select, button { margin-bottom: 1em; padding: 0.5em; font-size: 1em; }
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; }
+        h1 { color: #333; }
+    </style>
+</head>
+<body>
+
+    <h1>📝 New Inventory Item</h1>
+
+    <form id="intake-form">
+        <label for="itemName">Item Name:</label>
+        <input type="text" id="itemName" placeholder="e.g., Yamaha Outboard Motor F150" required>
+
+        <label for="sku">SKU / Part Number:</label>
+        <input type="text" id="sku" placeholder="Unique identifier" required>
+        
+        <label for="category">Category:</label>
+        <select id="category" required>
+            <option value="Retail">Retail</option>
+            <option value="Capital">Capital</option>
+            <option value="Consumable">Consumable</option>
+        </select>
+        
+        <label for="division">Division:</label>
+        <select id="division" required>
+            <option value="Used Sales">Used Sales</option>
+            <option value="Storage">Storage</option>
+            <option value="Repair">Repair</option>
+        </select>
+
+        <label for="location">Physical Location:</label>
+        <input type="text" id="location" placeholder="e.g., Outside Lot - Row 3" required>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" value="1" required>
+
+        <label for="price">Price ($):</label>
+        <input type="number" id="price" step="0.01" placeholder="e.g., 8500.00" required>
+        
+        <label for="itemImage">Item Image:</label>
+        <input type="file" id="itemImage" accept="image/*" required>
+        
+        <button type="submit">Save to Inventory</button>
+    </form>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
+    <script>
+        // --- THIS IS WHERE YOU CONNECT TO FIREBASE ---
+
+        // IMPORTANT: PASTE YOUR FIREBASE CONFIG OBJECT HERE
+        const firebaseConfig = {
+  apiKey: "AIzaSyCe33YSO0AKQ419ZIT_rhmE3LPFC2KU4ys",
+  authDomain: "rg-marine-v2.firebaseapp.com",
+  projectId: "rg-marine-v2",
+  storageBucket: "rg-marine-v2.firebasestorage.app",
+  messagingSenderId: "1029678913953",
+  appId: "1:1029678913953:web:62bfba90a0f30b3ce7d3e0",
+  measurementId: "G-8R66Z7G5NB"
+};
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore(); // Our connection to the Firestore database
+        const storage = firebase.storage(); // Our connection to the Storage service
+
+        // --- THIS IS THE LOGIC TO SAVE THE FORM DATA ---
+        
+        const intakeForm = document.getElementById('intake-form');
+
+        intakeForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // This stops the page from reloading
+
+            // 1. Get all the values from the form fields
+            const itemName = document.getElementById('itemName').value;
+            const sku = document.getElementById('sku').value;
+            const category = document.getElementById('category').value;
+            const division = document.getElementById('division').value;
+            const location = document.getElementById('location').value;
+            const quantity = parseInt(document.getElementById('quantity').value); // Convert to a number
+            const price = parseFloat(document.getElementById('price').value); // Convert to a decimal number
+            const imageFile = document.getElementById('itemImage').files[0]; // Get the selected file
+
+            try {
+                // 2. Upload the image to Firebase Storage
+                const storageRef = storage.ref(`inventory_images/${Date.now()}_${imageFile.name}`);
+                const uploadTask = await storageRef.put(imageFile);
+                const imageUrl = await uploadTask.ref.getDownloadURL(); // Get the public URL of the uploaded image
+
+                // 3. Save the item data (including the image URL) to Firestore
+                await db.collection('inventory').add({
+                    itemName: itemName,
+                    sku: sku,
+                    barcode: sku, // For now, we'll just use the SKU as the barcode data
+                    category: category,
+                    division: division,
+                    location: location,
+                    quantity: quantity,
+                    price: price,
+                    imageUrl: imageUrl, // Save the URL from Storage
+                    status: 'For Sale', // Set a default status
+                    dateAdded: new Date() // Add a timestamp
+                });
+
+                alert('✅ Item successfully added to inventory!');
+                intakeForm.reset(); // Clear the form for the next entry
+
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert('❌ Error saving item. Please check the console.');
+            }
+        });
+    </script>
+</body>
+</html>
