@@ -1,88 +1,109 @@
-<script>
-    // Firebase Config (ensure this matches your project)
-    const firebaseConfig = {
-        apiKey: "AIzaSyCe33YSO0AKQ419ZIT_rhmE3LPFC2KU4ys",
-        authDomain: "rg-marine-v2.firebaseapp.com",
-        projectId: "rg-marine-v2",
-        storageBucket: "rg-marine-v2.firebasestorage.app",
-        messagingSenderId: "1029678913953",
-        appId: "1:1029678913953:web:62bfba90a0f30b3ce7d3e0"
-    };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Intake</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+        form { display: flex; flex-direction: column; gap: 15px; }
+        input, select, button { padding: 10px; font-size: 1rem; }
+        button { background-color: #007bff; color: white; border: none; cursor: pointer; }
+        #success-message { color: green; display: none; margin-top: 15px; }
+    </style>
+</head>
+<body>
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-    const auth = firebase.auth();
+    <h1>Inventory Intake Form</h1>
+    <form id="intake-form">
+        <input type="text" id="item-name" placeholder="Item Name" required>
+        <input type="text" id="item-number" placeholder="Item Number" required>
+        <input type="text" id="category" placeholder="Category">
+        <input type="number" id="quantity" placeholder="Quantity" required>
+        <input type="number" id="price" placeholder="Price" step="0.01" required>
+        <input type="text" id="location" placeholder="Location">
+        
+        <label for="image-upload">Upload Image (Optional):</label>
+        <input type="file" id="image-upload" accept="image/*">
+        
+        <button type="submit">Add Item to Inventory</button>
+    </form>
 
-    // DOM Elements
-    const form = document.getElementById('intake-form');
-    const itemNameInput = document.getElementById('item-name');
-    const itemNumberInput = document.getElementById('item-number');
-    const categoryInput = document.getElementById('category');
-    const quantityInput = document.getElementById('quantity');
-    const priceInput = document.getElementById('price');
-    const locationInput = document.getElementById('location');
-    const imageInput = document.getElementById('image-upload');
-    const successMessage = document.getElementById('success-message');
+    <p id="success-message">Item successfully added!</p>
 
-    // Ensure user is signed in before allowing form submission
-    auth.onAuthStateChanged(user => {
-        if (!user) {
-            console.log("User is not signed in. Redirecting to login.");
-            // Optional: Redirect to login page if you want to enforce login for this page
-            // window.location.href = 'index.html'; 
-        } else {
-            console.log("User is signed in:", user.uid);
-        }
-    });
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        successMessage.style.display = 'none'; // Hide previous success messages
-
-        const itemData = {
-            itemName: itemNameInput.value,
-            itemNumber: itemNumberInput.value,
-            category: categoryInput.value,
-            quantity: Number(quantityInput.value),
-            price: Number(priceInput.value),
-            location: locationInput.value,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyCe33YSO0AKQ419ZIT_rhmE3LPFC2KU4ys",
+            authDomain: "rg-marine-v2.firebaseapp.com",
+            projectId: "rg-marine-v2",
+            storageBucket: "rg-marine-v2.firebasestorage.app",
+            messagingSenderId: "1029678913953",
+            appId: "1:1029678913953:web:62bfba90a0f30b3ce7d3e0"
         };
 
-        const imageFile = imageInput.files[0];
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        const auth = firebase.auth();
 
-        try {
-            // --- NEW LOGIC STARTS HERE ---
-            if (imageFile) {
-                // CASE 1: An image file was selected
-                console.log("Image found, starting upload...");
-                const imageRef = storage.ref(`inventory_images/${Date.now()}_${imageFile.name}`);
-                const snapshot = await imageRef.put(imageFile);
-                const downloadURL = await snapshot.ref.getDownloadURL();
+        const form = document.getElementById('intake-form');
+        const itemNameInput = document.getElementById('item-name');
+        const itemNumberInput = document.getElementById('item-number');
+        const categoryInput = document.getElementById('category');
+        const quantityInput = document.getElementById('quantity');
+        const priceInput = document.getElementById('price');
+        const locationInput = document.getElementById('location');
+        const imageInput = document.getElementById('image-upload');
+        const successMessage = document.getElementById('success-message');
 
-                itemData.imageUrl = downloadURL; // Add image URL to our data
-                console.log("Image uploaded successfully. URL:", downloadURL);
-
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                console.log("User is signed in:", user.uid);
             } else {
-                // CASE 2: No image file was selected
-                console.log("No image selected, skipping upload.");
-                itemData.imageUrl = ''; // Set image URL to an empty string
+                console.log("User is not signed in.");
             }
+        });
 
-            // --- SAVE DATA TO FIRESTORE ---
-            console.log("Saving data to Firestore:", itemData);
-            await db.collection('inventory').add(itemData);
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            successMessage.style.display = 'none';
 
-            // --- Show success and reset form ---
-            console.log("Document successfully written!");
-            successMessage.style.display = 'block';
-            form.reset();
+            const itemData = {
+                itemName: itemNameInput.value,
+                itemNumber: itemNumberInput.value,
+                category: categoryInput.value,
+                quantity: Number(quantityInput.value),
+                price: Number(priceInput.value),
+                location: locationInput.value,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
 
-        } catch (error) {
-            console.error("Error adding document: ", error);
-            alert("An error occurred. Please check the console for details.");
-        }
-    });
-</script>
+            const imageFile = imageInput.files[0];
+
+            try {
+                if (imageFile) {
+                    const imageRef = storage.ref(`inventory_images/${Date.now()}_${imageFile.name}`);
+                    const snapshot = await imageRef.put(imageFile);
+                    itemData.imageUrl = await snapshot.ref.getDownloadURL();
+                } else {
+                    itemData.imageUrl = '';
+                }
+
+                await db.collection('inventory').add(itemData);
+
+                successMessage.style.display = 'block';
+                form.reset();
+
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                alert("An error occurred. Please check the console for details.");
+            }
+        });
+    </script>
+</body>
+</html>
